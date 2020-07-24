@@ -4,6 +4,7 @@ ARG TOMCAT_SERVER_PORT=7005
 ARG TOMCAT_HTTP_PORT=7080
 ARG TOMCAT_SSL_PORT=7443
 ARG TOMCAT_AJP_PORT=7009
+ARG TOMCAT_JPDA_PORT=7000
 
 ARG TOMCAT_DIR=/usr/local/tomcat
 
@@ -19,6 +20,9 @@ RUN sed -i "s/<Server\ port=\"8005\"\ shutdown=\"SHUTDOWN\">/<Server\ port=\"$TO
 	sed -i "s/redirectPort=\"8443\"/redirectPort=\"$TOMCAT_SSL_PORT\"/g" $TOMCAT_DIR/conf/server.xml ; 
 
 RUN cat $TOMCAT_DIR/conf/server.xml
+
+# For remote debug, Changes are also required to the docker-compose.yml file as well. Add CATALINA_OPTS, e.g: CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
+EXPOSE $TOMCAT_JPDA_PORT
 
 #Change back to alfresco
 USER alfresco

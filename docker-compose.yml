@@ -17,6 +17,7 @@ services:
           context: ./configs-to-override/alfresco
         mem_limit: 1500m
         environment:
+            CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
             JAVA_OPTS: "
                 -Ddb.driver=org.postgresql.Driver
                 -Ddb.username=alfresco
@@ -63,6 +64,7 @@ services:
         environment:
             REPO_HOST: "alfresco"
             REPO_PORT: "7080"
+            CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
             JAVA_OPTS: "
                 -Xms500m
                 -Xmx500m
