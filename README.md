@@ -3,6 +3,13 @@ This project is a demo on how to change the acs, share, prostgres and proxy port
 
 [Change ACS 6.x, Share 6.x, Proxy (nginx) and DB (postgres) ports using docker-compose.yml and DockerFile](https://javaworld-abhinav.blogspot.com/2020/07/change-alfresco-share-proxy-and-db.html)
 
+### To create the external volumes use following command:
+
+`docker volume create <volumeName>`
+
+### To purge the external volumes use following command:
+
+`docker volume rm -f <volumeName>`
 
 ### To build use following command:
 
@@ -33,7 +40,34 @@ This project is a demo on how to change the acs, share, prostgres and proxy port
 
 `docker-compose -f ./docker-compose.yml logs -f`
 
-`docker-compose -f ./docker-compose.yml logs --tail="all"`
+
+### You can use launcher.bat/launcher.sh script to build, start, stop, purge volumes and tail logs:
+
+- For Windows:
+
+`.\launcher.bat build`
+
+`.\launcher.bat start`
+
+`.\launcher.bat stop`
+
+`.\launcher.bat purge`
+
+`.\launcher.bat tail`
+
+
+- For Linux:
+
+`.\launcher.sh build`
+
+`.\launcher.sh start`
+
+`.\launcher.sh stop`
+
+`.\launcher.sh purge`
+
+`.\launcher.sh tail`
+
 
 
 For more commands visit this cheat sheet:
