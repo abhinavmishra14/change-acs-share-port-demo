@@ -1,4 +1,6 @@
-FROM alfresco/alfresco-share:6.2.1
+ARG SHARE_TAG=6.2.1
+
+FROM alfresco/alfresco-share:${SHARE_TAG}
 
 ARG TOMCAT_SERVER_PORT=7005
 ARG TOMCAT_HTTP_PORT=7080
@@ -17,6 +19,13 @@ RUN sed -i "s/<Server\ port=\"8005\"\ shutdown=\"SHUTDOWN\">/<Server\ port=\"$TO
 
 #Uncomment if you are testing the updates in server.xml
 #RUN cat $TOMCAT_DIR/conf/server.xml
+
+#Fix for Admin tools user search issue (https://github.com/Alfresco/acs-community-packaging/issues/367)
+RUN sed -i 's@<show-authorization-status>true</show-authorization-status>@<show-authorization-status>false</show-authorization-status>@' \
+	$TOMCAT_DIR/shared/classes/alfresco/web-extension/share-config-custom.xml
+
+#Uncomment if you are testing the updates in share-config.xml
+#RUN cat $TOMCAT_DIR/shared/classes/alfresco/web-extension/share-config-custom.xml
 
 # For remote debug, Changes are also required to the docker-compose.yml file as well. Add CATALINA_OPTS, e.g: CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
 EXPOSE $TOMCAT_JPDA_PORT

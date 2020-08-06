@@ -43,11 +43,16 @@ services:
                 -Dimg.url=http://transform-core-aio:8090/
                 -Dtika.url=http://transform-core-aio:8090/
                 -Dtransform.misc.url=http://transform-core-aio:8090/
-
+                
                 -Dcsrf.filter.enabled=false
                 -Xms1500m -Xmx1500m
                 "
-
+        volumes:
+          - acs-volume:/usr/local/tomcat/alf_data
+        depends_on:
+          - postgres
+          - solr6
+          
     transform-core-aio:
         image: alfresco/alfresco-transform-core-aio:2.3.2
         mem_limit: 1536m
@@ -55,7 +60,7 @@ services:
             JAVA_OPTS: " -Xms256m -Xmx1536m"
         ports:
             - 8090:8090
-
+            
     share:
         build:
           dockerfile: ./Dockerfile
@@ -84,7 +89,9 @@ services:
         command: postgres -c max_connections=300 -c log_min_messages=LOG -p 5555
         ports:
             - 5555:5555
-
+        volumes:
+            - db-volume:/var/lib/postgresql/data
+            
     solr6:
         image: alfresco/alfresco-search-services:1.4.2.2
         mem_limit: 2g
@@ -102,9 +109,13 @@ services:
             #HTTP by default
             - ALFRESCO_SECURE_COMMS=none
             - "SOLR_JAVA_MEM=-Xms2g -Xmx2g"
+            
         ports:
             - 8083:9999 #Browser port
-
+        volumes:
+            - ass-volume:/opt/alfresco-search-services/contentstore
+            - ass-volume:/opt/alfresco-search-services/data
+            
     activemq:
         image: alfresco/alfresco-activemq:5.15.8
         mem_limit: 1g
@@ -126,3 +137,11 @@ services:
         links:
             - alfresco
             - share
+            
+volumes:
+  acs-volume:
+    external: true
+  db-volume:
+    external: true
+  ass-volume:
+    external: true

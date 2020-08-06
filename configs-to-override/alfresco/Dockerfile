@@ -1,4 +1,6 @@
-FROM alfresco/alfresco-content-repository-community:6.2.1-A8
+ARG ACS_TAG=6.2.1-A8
+
+FROM alfresco/alfresco-content-repository-community:${ACS_TAG}
 
 ARG TOMCAT_SERVER_PORT=7005
 ARG TOMCAT_HTTP_PORT=7080
