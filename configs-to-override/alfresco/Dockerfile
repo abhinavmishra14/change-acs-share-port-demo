@@ -1,4 +1,4 @@
-ARG ACS_TAG=6.2.1-A8
+ARG ACS_TAG
 
 FROM alfresco/alfresco-content-repository-community:${ACS_TAG}
 

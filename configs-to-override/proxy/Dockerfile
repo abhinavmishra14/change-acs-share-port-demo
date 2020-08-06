@@ -1,4 +1,4 @@
-ARG NGNIX_TAG=1.0.0
+ARG NGNIX_TAG
 
 FROM alfresco/acs-community-ngnix:${NGNIX_TAG}
 

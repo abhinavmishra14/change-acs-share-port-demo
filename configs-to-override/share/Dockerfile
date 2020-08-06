@@ -1,4 +1,4 @@
-ARG SHARE_TAG=6.2.1
+ARG SHARE_TAG
 
 FROM alfresco/alfresco-share:${SHARE_TAG}
 
