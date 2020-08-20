@@ -26,6 +26,14 @@ RUN sed -i "s/<Server\ port=\"8005\"\ shutdown=\"SHUTDOWN\">/<Server\ port=\"$TO
 # For remote debug, Changes are also required to the docker-compose.yml file as well. Add CATALINA_OPTS, e.g: CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
 EXPOSE $TOMCAT_JPDA_PORT
 
+# Copy add-ons jar module if there are any
+COPY Dockerfile add-ons/*.jar $TOMCAT_DIR/webapps/alfresco/WEB-INF/lib/
+
+# Copy and apply amp add-ons
+COPY Dockerfile add-ons/*.amp $TOMCAT_DIR/amps/
+RUN java -jar $TOMCAT_DIR/alfresco-mmt/alfresco-mmt*.jar install \
+              $TOMCAT_DIR/amps $TOMCAT_DIR/webapps/alfresco -directory -nobackup -force
+
 #Change back to alfresco
 USER alfresco
 

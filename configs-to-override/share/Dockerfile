@@ -30,4 +30,14 @@ RUN sed -i 's@<show-authorization-status>true</show-authorization-status>@<show-
 # For remote debug, Changes are also required to the docker-compose.yml file as well. Add CATALINA_OPTS, e.g: CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
 EXPOSE $TOMCAT_JPDA_PORT
 
+
+# Copy add-ons jar module if there are any
+COPY Dockerfile add-ons/*.jar $TOMCAT_DIR/webapps/share/WEB-INF/lib/
+
+# Copy and apply amp add-ons
+COPY Dockerfile add-ons/*.amp $TOMCAT_DIR/amps_share/
+RUN java -jar $TOMCAT_DIR/alfresco-mmt/alfresco-mmt*.jar install \
+              $TOMCAT_DIR/amps_share $TOMCAT_DIR/webapps/share -directory -nobackup -force
+			  
+			  
 #TODO:: Add more steps as needed
