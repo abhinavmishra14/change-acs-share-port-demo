@@ -55,7 +55,7 @@ services:
           - solr6
           
     transform-core-aio:
-        image: alfresco/alfresco-transform-core-aio:2.3.2
+        image: alfresco/alfresco-transform-core-aio:2.3.4
         mem_limit: 1536m
         environment:
             JAVA_OPTS: " -Xms256m -Xmx1536m"
@@ -96,7 +96,7 @@ services:
             - db-volume:/var/lib/postgresql/data
             
     solr6:
-        image: alfresco/alfresco-search-services:1.4.3
+        image: alfresco/alfresco-search-services:2.0.0
         mem_limit: 2g
         environment:
             #Solr needs to know how to register itself with Alfresco

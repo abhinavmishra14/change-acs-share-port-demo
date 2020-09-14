@@ -52,7 +52,7 @@ services:
           - solr6
           
     transform-core-aio:
-        image: alfresco/alfresco-transform-core-aio:2.3.2
+        image: alfresco/alfresco-transform-core-aio:2.3.4
         deploy:
           resources:
             limits:
@@ -102,7 +102,7 @@ services:
             - db-volume:/var/lib/postgresql/data
             
     solr6:
-        image: alfresco/alfresco-search-services:1.4.3
+        image: alfresco/alfresco-search-services:2.0.0
         deploy:
           resources:
             limits:
