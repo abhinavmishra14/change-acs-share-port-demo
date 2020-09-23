@@ -38,6 +38,10 @@ purge() {
     docker volume rm -f ${PARENT_FOLDER}_share-volume-logs
 }
 
+purgeAll() {
+   docker volume rm $(docker volume ls -q)
+}
+
 tail() {
     docker-compose -f "$COMPOSE_FILE_PATH" logs -f
 }

@@ -9,7 +9,7 @@ services:
           dockerfile: ./Dockerfile
           context: ./configs-to-override/alfresco
           args:
-            ACS_TAG: 6.2.1-A8
+            ACS_TAG: ${ACS_TAG}
         deploy:
           resources:
             limits:
@@ -43,22 +43,39 @@ services:
                 -Dtransform.misc.url=http://transform-core-aio:8090/
                 
                 -Dcsrf.filter.enabled=false
+                
+                -Dmail.host=smtp
+                -Dmail.port=25
+                -Dmail.username=anonymous
+                -Dmail.password=
+                -Dmail.protocol=smtp
+                -Dmail.smtps.starttls.enable=false
+                -Dmail.smtps.auth=false
+                
                 -Xms1500m -Xmx1500m
                 "
+            TZ: "America/New_York"
+
         volumes:
-          - acs-volume:/usr/local/tomcat/alf_data
+          #Bind mount SHORT SYNTAX - [SOURCE:]TARGET[:MODE]
+          #SOURCE can be a named volume or a (relative or absolute) path on the host system. 
+          #TARGET is an absolute path in the container where the volume is mounted. 
+          #MODE is a mount option which can be read-only (ro) or read-write (rw) (default).
+          - ./data/alfresco/alf_data:/usr/local/tomcat/alf_data/:rw
+          - ./logs/alfresco:/usr/local/tomcat/logs/:rw
         depends_on:
           - postgres
           - solr6
           
     transform-core-aio:
-        image: alfresco/alfresco-transform-core-aio:2.3.4
+        image: alfresco/alfresco-transform-core-aio:${TRANSFORMATION_CORE_TAG}
         deploy:
           resources:
             limits:
               memory: 1536m
         environment:
             JAVA_OPTS: " -Xms256m -Xmx1536m"
+            TZ: "America/New_York"
         ports:
             - 8090:8090
             
@@ -67,7 +84,7 @@ services:
           dockerfile: ./Dockerfile
           context: ./configs-to-override/share
           args:
-            SHARE_TAG: 6.2.1
+            SHARE_TAG: ${SHARE_TAG}
         deploy:
           resources:
             limits:
@@ -84,9 +101,13 @@ services:
                 -Dalfresco.context=alfresco
                 -Dalfresco.protocol=http
                 "
+            TZ: "America/New_York"
+            
+        volumes:
+          - ./logs/share:/usr/local/tomcat/logs/:rw
 
     postgres:
-        image: postgres:11.7
+        image: postgres:${POSTGRES_TAG}
         deploy:
           resources:
             limits:
@@ -95,14 +116,16 @@ services:
             - POSTGRES_PASSWORD=alfresco
             - POSTGRES_USER=alfresco
             - POSTGRES_DB=alfresco
+            - TZ=America/New_York
         command: postgres -c max_connections=300 -c log_min_messages=LOG -p 5555
         ports:
             - 5555:5555
         volumes:
-            - db-volume:/var/lib/postgresql/data
+          - ./data/postgres/data:/var/lib/postgresql/data/:rw
+          - ./logs/postgres:/var/log/postgresql/:rw
             
     solr6:
-        image: alfresco/alfresco-search-services:2.0.0
+        image: alfresco/alfresco-search-services:${ASS_TAG}
         deploy:
           resources:
             limits:
@@ -121,47 +144,46 @@ services:
             #HTTP by default
             - ALFRESCO_SECURE_COMMS=none
             - "SOLR_JAVA_MEM=-Xms2g -Xmx2g"
-            
+            - TZ=America/New_York
         ports:
             - 8083:9999 #Browser port
         volumes:
-            - ass-volume:/opt/alfresco-search-services/contentstore
-            - ass-volume:/opt/alfresco-search-services/data
+            - ./data/search-services/data:/opt/alfresco-search-services/data/:rw
             
     activemq:
-        image: alfresco/alfresco-activemq:5.15.8
+        image: alfresco/alfresco-activemq:${AMQ_TAG}
         deploy:
           resources:
             limits:
               memory: 1g
+        environment:
+            TZ: "America/New_York"
         ports:
             - 8161:8161 # Web Console
             - 5672:5672 # AMQP
             - 61616:61616 # OpenWire
             - 61613:61613 # STOMP
 
+    smtp:
+        image: mwader/postfix-relay
+        mem_limit: 128m
+        
     proxy:
         build:
           dockerfile: ./Dockerfile
           context: ./configs-to-override/proxy
           args:
-            NGNIX_TAG: 1.0.0
+            NGNIX_TAG: ${NGNIX_TAG}
         deploy:
           resources:
             limits:
               memory: 256m
         depends_on:
             - alfresco
+        environment:
+            TZ: "America/New_York"
         ports:
             - 7080:7080
         links:
             - alfresco
             - share
-            
-volumes:
-  acs-volume:
-    external: true
-  db-volume:
-    external: true
-  ass-volume:
-    external: true

@@ -42,9 +42,6 @@ USER alfresco
 #It could be useful in cases when you already built a custom image but launch an container with some additional config in global properties.
 COPY alfresco-global.properties $TOMCAT_DIR/shared/classes/alfresco-global.properties
 
-#Copy custom log4j
-COPY dev-log4j.properties $TOMCAT_DIR/shared/classes/alfresco/extension
-
 #TODO:: Add more steps as needed
 
 

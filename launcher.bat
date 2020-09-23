@@ -86,3 +86,7 @@ EXIT /B 0
     docker volume rm -f %PARENT_FOLDER%_db-volume-logs
     docker volume rm -f %PARENT_FOLDER%_ass-volume-logs
 EXIT /B 0
+
+:purgeAll
+   docker volume rm $(docker volume ls -q)
+EXIT /B 0

@@ -42,17 +42,11 @@ IF %1==tail (
 EXIT /B %ERRORLEVEL%
 
 
-:buildImages
-    docker volume create acs-volume
-    docker volume create db-volume
-    docker volume create ass-volume
-    docker-compose -f "%COMPOSE_FILE_PATH%" --compatibility build --no-cache
+:buildImages	
+	docker-compose -f "%COMPOSE_FILE_PATH%" --compatibility build --no-cache
 EXIT /B 0
 
 :launch
-    docker volume create acs-volume
-    docker volume create db-volume
-    docker volume create ass-volume
     docker-compose -f "%COMPOSE_FILE_PATH%" --compatibility up --build
 EXIT /B 0
 
@@ -68,7 +62,11 @@ EXIT /B 0
 EXIT /B 0
 
 :purge
-    docker volume rm -f acs-volume
-    docker volume rm -f db-volume
-    docker volume rm -f ass-volume
+   RMDIR "logs" /S /Q
+   RMDIR "data" /S /Q
+
+EXIT /B 0
+
+:purgeAll
+   docker volume rm $(docker volume ls -q)
 EXIT /B 0

@@ -2,20 +2,18 @@
 
 #docker-compose version 3.x launcher
 
-export COMPOSE_FILE_PATH="${PWD}/docker-compose-v3.yml"
+export COMPOSE_FILE_PATH="${PWD}/docker-compose-v3-linux.yml"
 echo Docker compose file: $COMPOSE_FILE_PATH
 
 buildImages() {
-    docker volume create acs-volume
-    docker volume create db-volume
-    docker volume create ass-volume
+    mkdir data
+	mkdir logs
     docker-compose -f "$COMPOSE_FILE_PATH" --compatibility build --no-cache
 }
 
 launch() {
-	docker volume create acs-volume
-    docker volume create db-volume
-    docker volume create ass-volume
+	mkdir data
+	mkdir logs
     docker-compose -f "$COMPOSE_FILE_PATH" --compatibility up --build
 }
 
@@ -27,9 +25,14 @@ down() {
 }
 
 purge() {
-    docker volume rm -f acs-volume
-    docker volume rm -f db-volume
-    docker volume rm -f ass-volume
+	rm -rf data
+	rm -rf logs
+}
+
+purgeAll() {
+   rm -rf data
+   rm -rf logs
+   docker volume rm $(docker volume ls -q)
 }
 
 tail() {
