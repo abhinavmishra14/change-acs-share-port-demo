@@ -15,7 +15,7 @@ services:
           dockerfile: ./Dockerfile
           context: ./configs-to-override/alfresco
           args:
-            ACS_TAG: 6.2.1-A8
+            ACS_TAG: ${ACS_TAG}
         mem_limit: 1500m
         environment:
             CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
@@ -50,12 +50,13 @@ services:
                 "
         volumes:
           - acs-volume:/usr/local/tomcat/alf_data
+          - acs-volume-logs:/usr/local/tomcat/logs
         depends_on:
           - postgres
           - solr6
           
     transform-core-aio:
-        image: alfresco/alfresco-transform-core-aio:2.3.4
+        image: alfresco/alfresco-transform-core-aio:${TRANSFORMATION_CORE_TAG}
         mem_limit: 1536m
         environment:
             JAVA_OPTS: " -Xms256m -Xmx1536m"
@@ -67,7 +68,7 @@ services:
           dockerfile: ./Dockerfile
           context: ./configs-to-override/share
           args:
-            SHARE_TAG: 6.2.1
+            SHARE_TAG: ${SHARE_TAG}
         mem_limit: 1g
         environment:
             REPO_HOST: "alfresco"
@@ -81,9 +82,11 @@ services:
                 -Dalfresco.context=alfresco
                 -Dalfresco.protocol=http
                 "
-
+        volumes:
+            - share-volume-logs:/usr/local/tomcat/logs
+            
     postgres:
-        image: postgres:11.7
+        image: postgres:${POSTGRES_TAG}
         mem_limit: 512m
         environment:
             - POSTGRES_PASSWORD=alfresco
@@ -94,9 +97,10 @@ services:
             - 5555:5555
         volumes:
             - db-volume:/var/lib/postgresql/data
+            - db-volume-logs:/var/log/postgresql
             
     solr6:
-        image: alfresco/alfresco-search-services:2.0.0
+        image: alfresco/alfresco-search-services:${ASS_TAG}
         mem_limit: 2g
         environment:
             #Solr needs to know how to register itself with Alfresco
@@ -116,11 +120,11 @@ services:
         ports:
             - 8083:9999 #Browser port
         volumes:
-            - ass-volume:/opt/alfresco-search-services/contentstore
             - ass-volume:/opt/alfresco-search-services/data
+            - ass-volume-logs:/opt/alfresco-search-services/logs
             
     activemq:
-        image: alfresco/alfresco-activemq:5.15.8
+        image: alfresco/alfresco-activemq:${AMQ_TAG}
         mem_limit: 1g
         ports:
             - 8161:8161 # Web Console
@@ -133,7 +137,7 @@ services:
           dockerfile: ./Dockerfile
           context: ./configs-to-override/proxy
           args:
-            NGNIX_TAG: 1.0.0
+            NGNIX_TAG: ${NGNIX_TAG}
         mem_limit: 256m
         depends_on:
             - alfresco
@@ -143,10 +147,28 @@ services:
             - alfresco
             - share
             
+# Named docker volumes top-level
+# Docker compose external named volumes can be used across the Docker installation and 
+# they need to be created by the user (otherwise fails) using the docker volume create command.
 volumes:
   acs-volume:
-    external: true
+    #Not sharing the volume yet, when plan to share volume between services, enable 'external'
+    #external: true
+  acs-volume-logs:
+    #Not sharing the volume yet, when plan to share volume between services, enable 'external'
+    #external: true
+  share-volume-logs:
+    #Not sharing the volume yet, when plan to share volume between services, enable 'external'
+    #external: true
   db-volume:
-    external: true
+    #Not sharing the volume yet, when plan to share volume between services, enable 'external'
+    #external: true
+  db-volume-logs:
+    #Not sharing the volume yet, when plan to share volume between services, enable 'external'
+    #external: true
   ass-volume:
-    external: true
+    #Not sharing the volume yet, when plan to share volume between services, enable 'external'
+    #external: true
+  ass-volume-logs:
+    #Not sharing the volume yet, when plan to share volume between services, enable 'external'
+    #external: true
