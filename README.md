@@ -68,6 +68,32 @@ This project is a demo on how to change the acs, share, prostgres and proxy port
 
 `.\launcher.sh tail`
 
+### For docker-compose version 3.x you can use launcher-dcv3.bat/launcher-dcv3.sh script to build, start, stop, purge volumes and tail logs:
+
+- For Windows:
+
+`.\launcher-dcv3.bat build`
+
+`.\launcher-dcv3.bat start`
+
+`.\launcher-dcv3.bat stop`
+
+`.\launcher-dcv3.bat purge`
+
+`.\launcher-dcv3.bat tail`
+
+
+- For Linux:
+
+`.\launcher-dcv3.sh build`
+
+`.\launcher-dcv3.sh start`
+
+`.\launcher-dcv3.sh stop`
+
+`.\launcher-dcv3.sh purge`
+
+`.\launcher-dcv3.sh tail`
 
 
 For more commands visit this cheat sheet:
