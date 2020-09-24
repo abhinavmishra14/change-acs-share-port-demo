@@ -64,7 +64,6 @@ EXIT /B 0
 :purge
    RMDIR "logs" /S /Q
    RMDIR "data" /S /Q
-
 EXIT /B 0
 
 :purgeAll

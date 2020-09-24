@@ -6,14 +6,10 @@ export COMPOSE_FILE_PATH="${PWD}/docker-compose-v3-linux.yml"
 echo Docker compose file: $COMPOSE_FILE_PATH
 
 buildImages() {
-    mkdir data
-	mkdir logs
     docker-compose -f "$COMPOSE_FILE_PATH" --compatibility build --no-cache
 }
 
 launch() {
-	mkdir data
-	mkdir logs
     docker-compose -f "$COMPOSE_FILE_PATH" --compatibility up --build
 }
 
