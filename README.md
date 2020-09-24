@@ -1,7 +1,7 @@
 # change-acs-share-port-demo
 This project is a demo on how to change the acs, share, prostgres and proxy ports in dockerized environment
 
-[Change ACS 6.x, Share 6.x, Proxy (nginx) and DB (postgres) ports using docker-compose.yml and DockerFile](https://javaworld-abhinav.blogspot.com/2020/07/change-alfresco-share-proxy-and-db.html)
+[Change ACS 6.x, Share 6.x, Proxy (nginx), Solr6 and DB (postgres) ports using docker-compose.yml and DockerFile](https://javaworld-abhinav.blogspot.com/2020/07/change-alfresco-share-proxy-and-db.html)
 
 ### To create the external volumes use following command:
 
