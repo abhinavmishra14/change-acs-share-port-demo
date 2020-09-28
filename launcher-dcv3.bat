@@ -37,6 +37,12 @@ IF %1==tail (
     GOTO END
 )
 
+IF %1==purgeAll (
+    CALL:down
+    CALL:purgeAll
+    GOTO END
+)
+
 
 :END
 EXIT /B %ERRORLEVEL%

@@ -61,6 +61,10 @@ case "$1" in
     down
     purge
     ;;
+  purgeAll)
+    down
+    purgeAll
+    ;;
   tail)
     tail
     ;;

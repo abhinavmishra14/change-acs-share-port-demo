@@ -61,8 +61,9 @@ services:
           #SOURCE can be a named volume or a (relative or absolute) path on the host system. 
           #TARGET is an absolute path in the container where the volume is mounted. 
           #MODE is a mount option which can be read-only (ro) or read-write (rw) (default).
-          - ./data/alfresco/alf_data:/usr/local/tomcat/alf_data/:rw
-          - ./logs/alfresco:/usr/local/tomcat/logs/:rw
+          #Example: ./data/alfresco/alf_data:/usr/local/tomcat/alf_data/:rw
+          - ./data/alfresco/alf_data:/usr/local/tomcat/alf_data
+          - ./logs/alfresco:/usr/local/tomcat/logs
         depends_on:
           - postgres
           - solr6
@@ -104,7 +105,7 @@ services:
             TZ: "America/New_York"
             
         volumes:
-          - ./logs/share:/usr/local/tomcat/logs/:rw
+          - ./logs/share:/usr/local/tomcat/logs
 
     postgres:
         image: postgres:${POSTGRES_TAG}
@@ -121,8 +122,8 @@ services:
         ports:
             - 5555:5555
         volumes:
-          - ./data/postgres/data:/var/lib/postgresql/data/:rw
-          - ./logs/postgres:/var/log/postgresql/:rw
+          - ./data/postgres/data:/var/lib/postgresql/data
+          - ./logs/postgres:/var/log/postgresql
             
     solr6:
         image: alfresco/alfresco-search-services:${ASS_TAG}
@@ -148,7 +149,7 @@ services:
         ports:
             - 8083:9999 #Browser port
         volumes:
-            - ./data/search-services/data:/opt/alfresco-search-services/data/:rw
+            - ./data/search-services/data:/opt/alfresco-search-services/data
             
     activemq:
         image: alfresco/alfresco-activemq:${AMQ_TAG}

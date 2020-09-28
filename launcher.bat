@@ -35,6 +35,13 @@ IF %1==purge (
     GOTO END
 )
 
+IF %1==purgeAll (
+    CALL :init
+    CALL:down
+    CALL:purgeAll
+    GOTO END
+)
+
 IF %1==tail (
     CALL :tail
     GOTO END
