@@ -20,6 +20,10 @@ RUN sed -i "s/<Server\ port=\"8005\"\ shutdown=\"SHUTDOWN\">/<Server\ port=\"$TO
 #Uncomment if you are testing the updates in server.xml
 #RUN cat $TOMCAT_DIR/conf/server.xml
 
+#Disable resource caching
+#RUN sed -i "s|<Context>|<Context>\n<Resources cachingAllowed=\"false\"/> |g" $TOMCAT_DIR/conf/context.xml ;
+#RUN cat $TOMCAT_DIR/conf/context.xml
+
 #Fix for Admin tools user search issue (https://github.com/Alfresco/acs-community-packaging/issues/367)
 RUN sed -i 's@<show-authorization-status>true</show-authorization-status>@<show-authorization-status>false</show-authorization-status>@' \
 	$TOMCAT_DIR/shared/classes/alfresco/web-extension/share-config-custom.xml
