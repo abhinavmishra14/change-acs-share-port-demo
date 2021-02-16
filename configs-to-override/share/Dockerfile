@@ -21,7 +21,7 @@ RUN sed -i "s/<Server\ port=\"8005\"\ shutdown=\"SHUTDOWN\">/<Server\ port=\"$TO
 #RUN cat $TOMCAT_DIR/conf/server.xml
 
 #Disable resource caching
-#RUN sed -i "s|<Context>|<Context>\n<Resources cachingAllowed=\"false\"/> |g" $TOMCAT_DIR/conf/context.xml ;
+RUN sed -i "s|<Context>|<Context>\n<Resources cachingAllowed=\"false\"/> |g" $TOMCAT_DIR/conf/context.xml ;
 #RUN cat $TOMCAT_DIR/conf/context.xml
 
 #Fix for Admin tools user search issue (https://github.com/Alfresco/acs-community-packaging/issues/367)
