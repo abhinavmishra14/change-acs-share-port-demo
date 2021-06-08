@@ -13,9 +13,18 @@ services:
         deploy:
           resources:
             limits:
-              memory: 1500m
+              memory: 4g
         environment:
-            CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
+            JAVA_TOOL_OPTIONS: "
+                -Dencryption.keystore.type=JCEKS
+                -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding
+                -Dencryption.keyAlgorithm=DESede
+                -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
+                -Dmetadata-keystore.password=mp6yc0UD9e
+                -Dmetadata-keystore.aliases=metadata
+                -Dmetadata-keystore.metadata.password=oKIWzVdEdA
+                -Dmetadata-keystore.metadata.algorithm=DESede
+                "
             JAVA_OPTS: "
                 -Ddb.driver=org.postgresql.Driver
                 -Ddb.username=alfresco
@@ -23,6 +32,7 @@ services:
                 -Ddb.url=jdbc:postgresql://postgres:5555/alfresco
                 -Dsolr.host=solr6
                 -Dsolr.port=9999
+                -Dsolr.http.connection.timeout=1000
                 -Dsolr.secureComms=none
                 -Dsolr.base.url=/solr
                 -Dindex.subsystem.name=solr6
@@ -33,17 +43,10 @@ services:
                 -Daos.baseUrlOverwrite=http://localhost:7080/alfresco/aos
                 -Dmessaging.broker.url=\"failover:(nio://activemq:61616)?timeout=3000&jms.useCompression=true\"
                 -Ddeployment.method=DOCKER_COMPOSE
-
+                -Dlocal.transform.service.enabled=true
+                -Dtransformer.Archive.includeContents=false
                 -DlocalTransform.core-aio.url=http://transform-core-aio:8090/
-
-                -Dalfresco-pdf-renderer.url=http://transform-core-aio:8090/
-                -Djodconverter.url=http://transform-core-aio:8090/
-                -Dimg.url=http://transform-core-aio:8090/
-                -Dtika.url=http://transform-core-aio:8090/
-                -Dtransform.misc.url=http://transform-core-aio:8090/
-                
                 -Dcsrf.filter.enabled=false
-                
                 -Dmail.host=smtp
                 -Dmail.port=25
                 -Dmail.username=anonymous
@@ -51,8 +54,7 @@ services:
                 -Dmail.protocol=smtp
                 -Dmail.smtps.starttls.enable=false
                 -Dmail.smtps.auth=false
-                
-                -Xms1500m -Xmx1500m
+                -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80
                 "
             TZ: "America/New_York"
 
@@ -75,7 +77,7 @@ services:
             limits:
               memory: 1536m
         environment:
-            JAVA_OPTS: " -Xms256m -Xmx1536m"
+            JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
             TZ: "America/New_York"
         ports:
             - 8090:8090
@@ -89,14 +91,13 @@ services:
         deploy:
           resources:
             limits:
-              memory: 1g
+              memory: 2g
         environment:
             REPO_HOST: "alfresco"
             REPO_PORT: "7080"
-            CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
             JAVA_OPTS: "
-                -Xms500m
-                -Xmx500m
+                -XX:MinRAMPercentage=50
+                -XX:MaxRAMPercentage=80
                 -Dalfresco.host=localhost
                 -Dalfresco.port=7080
                 -Dalfresco.context=alfresco
@@ -112,13 +113,14 @@ services:
         deploy:
           resources:
             limits:
-              memory: 512m
+              memory: 1g
         environment:
             - POSTGRES_PASSWORD=alfresco
             - POSTGRES_USER=alfresco
             - POSTGRES_DB=alfresco
             - TZ=America/New_York
         command: postgres -c max_connections=300 -c log_min_messages=LOG -p 5555
+        restart: on-failure:5
         ports:
             - 5555:5555
         volumes:
@@ -183,6 +185,9 @@ services:
             - alfresco
         environment:
             TZ: "America/New_York"
+            DISABLE_PROMETHEUS: "true"
+            DISABLE_SYNCSERVICE: "true"
+            DISABLE_ADW: "true"
         ports:
             - 7080:7080
         links:
