@@ -28,7 +28,7 @@ purge() {
 purgeAll() {
    rm -rf data
    rm -rf logs
-   docker volume rm $(docker volume ls -q)
+   docker volume prune -f
 }
 
 tail() {

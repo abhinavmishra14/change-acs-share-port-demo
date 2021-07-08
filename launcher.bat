@@ -95,5 +95,5 @@ EXIT /B 0
 EXIT /B 0
 
 :purgeAll
-   docker volume rm $(docker volume ls -q)
+   docker volume prune -f
 EXIT /B 0

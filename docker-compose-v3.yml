@@ -44,7 +44,6 @@ services:
                 -Dmessaging.broker.url=\"failover:(nio://activemq:61616)?timeout=3000&jms.useCompression=true\"
                 -Ddeployment.method=DOCKER_COMPOSE
                 -Dlocal.transform.service.enabled=true
-                -Dtransformer.Archive.includeContents=false
                 -DlocalTransform.core-aio.url=http://transform-core-aio:8090/
                 -Dcsrf.filter.enabled=false
                 -Dmail.host=smtp
@@ -119,8 +118,7 @@ services:
             - POSTGRES_USER=alfresco
             - POSTGRES_DB=alfresco
             - TZ=America/New_York
-        command: postgres -c max_connections=300 -c log_min_messages=LOG -p 5555
-        restart: on-failure:5
+        command: postgres -p 5555 -c max_connections=300 -c log_min_messages=LOG
         ports:
             - 5555:5555
         volumes:

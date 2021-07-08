@@ -49,22 +49,22 @@ EXIT /B %ERRORLEVEL%
 
 
 :buildImages	
-	docker-compose -f "%COMPOSE_FILE_PATH%" --compatibility build --no-cache
+	docker-compose -f "%COMPOSE_FILE_PATH%" build --no-cache
 EXIT /B 0
 
 :launch
-    docker-compose -f "%COMPOSE_FILE_PATH%" --compatibility up --build
+    docker-compose -f "%COMPOSE_FILE_PATH%" up --build
 EXIT /B 0
 
 
 :down
     if exist "%COMPOSE_FILE_PATH%" (
-        docker-compose -f "%COMPOSE_FILE_PATH%" --compatibility down
+        docker-compose -f "%COMPOSE_FILE_PATH%" down
     )
 EXIT /B 0
 
 :tail
-    docker-compose -f "%COMPOSE_FILE_PATH%" --compatibility logs -f
+    docker-compose -f "%COMPOSE_FILE_PATH%" logs -f
 EXIT /B 0
 
 :purge
@@ -73,5 +73,7 @@ EXIT /B 0
 EXIT /B 0
 
 :purgeAll
-   docker volume rm $(docker volume ls -q)
+   RMDIR "logs" /S /Q
+   RMDIR "data" /S /Q
+   docker volume prune -f
 EXIT /B 0

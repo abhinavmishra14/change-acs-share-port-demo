@@ -39,7 +39,7 @@ purge() {
 }
 
 purgeAll() {
-   docker volume rm $(docker volume ls -q)
+   docker volume prune -f
 }
 
 tail() {
