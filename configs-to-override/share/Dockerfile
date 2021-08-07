@@ -17,12 +17,8 @@ RUN sed -i "s/<Server\ port=\"8005\"\ shutdown=\"SHUTDOWN\">/<Server\ port=\"$TO
 	sed -i "s/\ <Connector\ port=\"8009\"\ protocol=\"AJP\/1.3\"/\  <Connector\ port=\"$TOMCAT_AJP_PORT\"\ protocol=\"AJP\/1.3\"\ /g" $TOMCAT_DIR/conf/server.xml ; \
 	sed -i "s/redirectPort=\"8443\"/redirectPort=\"$TOMCAT_SSL_PORT\"/g" $TOMCAT_DIR/conf/server.xml ; 
 
-#Uncomment if you are testing the updates in server.xml
-#RUN cat $TOMCAT_DIR/conf/server.xml
-
 #Disable resource caching
 RUN sed -i "s|<Context>|<Context>\n<Resources cachingAllowed=\"false\"/> |g" $TOMCAT_DIR/conf/context.xml ;
-#RUN cat $TOMCAT_DIR/conf/context.xml
 
 #Fix for Admin tools user search issue (https://github.com/Alfresco/acs-community-packaging/issues/367)
 RUN sed -i 's@<show-authorization-status>true</show-authorization-status>@<show-authorization-status>false</show-authorization-status>@' \

@@ -22,12 +22,10 @@ down() {
 
 purge() {
 	rm -rf data
-	rm -rf logs
 }
 
 purgeAll() {
    rm -rf data
-   rm -rf logs
    docker volume prune -f
 }
 

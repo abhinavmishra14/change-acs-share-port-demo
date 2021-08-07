@@ -64,7 +64,6 @@ services:
           #MODE is a mount option which can be read-only (ro) or read-write (rw) (default).
           #Example: ./data/alfresco/alf_data:/usr/local/tomcat/alf_data/:rw
           - ./data/alfresco/alf_data:/usr/local/tomcat/alf_data
-          - ./logs/alfresco:/usr/local/tomcat/logs
         depends_on:
           - postgres
           - solr6
@@ -103,9 +102,6 @@ services:
                 -Dalfresco.protocol=http
                 "
             TZ: "America/New_York"
-            
-        volumes:
-          - ./logs/share:/usr/local/tomcat/logs
 
     postgres:
         image: postgres:${POSTGRES_TAG}
@@ -117,16 +113,20 @@ services:
             - POSTGRES_PASSWORD=alfresco
             - POSTGRES_USER=alfresco
             - POSTGRES_DB=alfresco
+            - PGPORT=5555
             - TZ=America/New_York
-        command: postgres -p 5555 -c max_connections=300 -c log_min_messages=LOG
+        command: postgres -c max_connections=300 -c log_min_messages=LOG
         ports:
             - 5555:5555
         volumes:
           - ./data/postgres/data:/var/lib/postgresql/data
-          - ./logs/postgres:/var/log/postgresql
             
     solr6:
-        image: alfresco/alfresco-search-services:${ASS_TAG}
+        build:
+          dockerfile: ./Dockerfile
+          context: ./configs-to-override/solr
+          args:
+            ASS_TAG: ${ASS_TAG}
         deploy:
           resources:
             limits:

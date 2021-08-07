@@ -68,12 +68,10 @@ EXIT /B 0
 EXIT /B 0
 
 :purge
-   RMDIR "logs" /S /Q
    RMDIR "data" /S /Q
 EXIT /B 0
 
 :purgeAll
-   RMDIR "logs" /S /Q
    RMDIR "data" /S /Q
    docker volume prune -f
 EXIT /B 0

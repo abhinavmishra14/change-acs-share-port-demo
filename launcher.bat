@@ -66,10 +66,6 @@ EXIT /B 0
     :docker volume create acs-volume
     :docker volume create db-volume
     :docker volume create ass-volume
-	:docker volume create acs-volume-logs
-	:docker volume create share-volume-logs
-    :docker volume create db-volume-logs
-    :docker volume create ass-volume-logs
     docker-compose -f "%COMPOSE_FILE_PATH%" up --build	
 	EXIT /B 0
 
@@ -88,10 +84,6 @@ EXIT /B 0
     docker volume rm -f %PARENT_FOLDER%_acs-volume
     docker volume rm -f %PARENT_FOLDER%_db-volume
     docker volume rm -f %PARENT_FOLDER%_ass-volume
-	docker volume rm -f %PARENT_FOLDER%_acs-volume-logs
-	docker volume rm -f %PARENT_FOLDER%_share-volume-logs
-    docker volume rm -f %PARENT_FOLDER%_db-volume-logs
-    docker volume rm -f %PARENT_FOLDER%_ass-volume-logs
 EXIT /B 0
 
 :purgeAll
