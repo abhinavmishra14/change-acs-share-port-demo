@@ -117,6 +117,7 @@ services:
             - POSTGRES_PASSWORD=alfresco
             - POSTGRES_USER=alfresco
             - POSTGRES_DB=alfresco
+            - PGPORT=5555
             - TZ=America/New_York
         command: postgres -c max_connections=300 -c log_min_messages=LOG -p 5555
         ports:
@@ -126,7 +127,11 @@ services:
           - ./logs/postgres:/var/log/postgresql
             
     solr6:
-        image: alfresco/alfresco-search-services:${ASS_TAG}
+        build:
+          dockerfile: ./Dockerfile
+          context: ./configs-to-override/solr
+          args:
+            ASS_TAG: ${ASS_TAG}
         deploy:
           resources:
             limits:

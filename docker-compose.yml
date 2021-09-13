@@ -92,6 +92,7 @@ services:
             - POSTGRES_PASSWORD=alfresco
             - POSTGRES_USER=alfresco
             - POSTGRES_DB=alfresco
+            - PGPORT=5555
         command: postgres -c max_connections=300 -c log_min_messages=LOG -p 5555
         ports:
             - 5555:5555
@@ -100,7 +101,11 @@ services:
             - db-volume-logs:/var/log/postgresql
             
     solr6:
-        image: alfresco/alfresco-search-services:${ASS_TAG}
+        build:
+          dockerfile: ./Dockerfile
+          context: ./configs-to-override/solr
+          args:
+            ASS_TAG: ${ASS_TAG}
         mem_limit: 2g
         environment:
             #Solr needs to know how to register itself with Alfresco
