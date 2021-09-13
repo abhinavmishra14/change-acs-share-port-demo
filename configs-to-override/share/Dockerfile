@@ -24,8 +24,8 @@ RUN sed -i "s|<Context>|<Context>\n<Resources cachingAllowed=\"false\"/> |g" $TO
 RUN sed -i 's@<show-authorization-status>true</show-authorization-status>@<show-authorization-status>false</show-authorization-status>@' \
 	$TOMCAT_DIR/shared/classes/alfresco/web-extension/share-config-custom.xml
 
-#Uncomment if you are testing the updates in share-config.xml
-#RUN cat $TOMCAT_DIR/shared/classes/alfresco/web-extension/share-config-custom.xml
+# In base image it tries to write logs at root directory which requires 'root' user access.
+RUN sed -i "s|log4j.appender.File.File\=share.log|log4j.appender.File.File\=logs/share.log |g" $TOMCAT_DIR/webapps/share/WEB-INF/classes/log4j.properties ;
 
 # For remote debug, Changes are also required to the docker-compose.yml file as well. Add CATALINA_OPTS, e.g: CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
 EXPOSE $TOMCAT_JPDA_PORT
