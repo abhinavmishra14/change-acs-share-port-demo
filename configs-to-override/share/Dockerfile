@@ -30,6 +30,10 @@ RUN sed -i "s|log4j.appender.File.File\=share.log|log4j.appender.File.File\=logs
 # For remote debug, Changes are also required to the docker-compose.yml file as well. Add CATALINA_OPTS, e.g: CATALINA_OPTS : "-agentlib:jdwp=transport=dt_socket,address=*:7000,server=y,suspend=n"
 EXPOSE $TOMCAT_JPDA_PORT
 
+# Update session timeout config from default 60 minutes to 30 minutes:
+RUN sed -i 's@<session-timeout>60</session-timeout>@<session-timeout>30</session-timeout>@' \
+	$TOMCAT_DIR/webapps/share/WEB-INF/web.xml
+
 
 # Copy add-ons jar module if there are any
 COPY Dockerfile add-ons/*.jar $TOMCAT_DIR/webapps/share/WEB-INF/lib/
