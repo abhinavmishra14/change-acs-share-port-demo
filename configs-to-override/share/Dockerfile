@@ -49,6 +49,6 @@ RUN bash -c 'mkdir -pv $TOMCAT_DIR/modules/share'
 #Setup simple module config
 COPY simple-module-config/share.xml $TOMCAT_DIR/conf/Catalina/localhost/
 #Copy simple modules if you have any
-COPY simple-modules/*.jar $TOMCAT_DIR/modules/share/
+COPY simple-modules/* $TOMCAT_DIR/modules/share/
 			  
 #TODO:: Add more steps as needed

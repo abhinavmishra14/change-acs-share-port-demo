@@ -47,7 +47,7 @@ USER alfresco
 #Setup simple module config
 COPY simple-module-config/alfresco.xml $TOMCAT_DIR/conf/Catalina/localhost/
 #Copy simple modules if you have any
-COPY simple-modules/*.jar $TOMCAT_DIR/modules/platform/
+COPY simple-modules/* $TOMCAT_DIR/modules/platform/
 
 #Copy and override the alfresco-global.properties which comes with custom image. 
 #It could be useful in cases when you already built a custom image but launch an container with some additional config in global properties.
