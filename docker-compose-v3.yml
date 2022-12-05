@@ -39,9 +39,9 @@ services:
                 -Dindex.subsystem.name=solr6
                 -Dshare.host=127.0.0.1
                 -Dshare.port=7080
-                -Dalfresco.host=localhost
+                -Dalfresco.host=127.0.0.1
                 -Dalfresco.port=7080
-                -Daos.baseUrlOverwrite=http://localhost:7080/alfresco/aos
+                -Daos.baseUrlOverwrite=http://127.0.0.1:7080/alfresco/aos
                 -Dmessaging.broker.url=\"failover:(nio://activemq:61616)?timeout=3000&jms.useCompression=true\"
                 -Ddeployment.method=DOCKER_COMPOSE
                 -Dlocal.transform.service.enabled=true
@@ -192,6 +192,8 @@ services:
             DISABLE_PROMETHEUS: "true"
             DISABLE_SYNCSERVICE: "true"
             DISABLE_ADW: "true"
+            DISABLE_CONTROL_CENTER: "true"
+            ENABLE_CONTENT_APP: "false"
         ports:
             - 7080:7080
         links:
