@@ -76,7 +76,10 @@ services:
             limits:
               memory: 1536m
         environment:
-            JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+            JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80
+              -Dlogging.level.org.alfresco.transform.common.TransformerDebug=error 
+              -Dlogging.level.org.alfresco.transform.router.TransformerDebug=error
+              "
             TZ: "America/New_York"
         ports:
             - 8090:8090
